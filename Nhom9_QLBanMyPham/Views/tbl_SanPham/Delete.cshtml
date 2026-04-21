@@ -1,0 +1,233 @@
+﻿@model Nhom9_QLBanMyPham.Models.tbl_SanPham
+
+@{
+    ViewBag.Title = "Xóa sản phẩm";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    :root {
+        --primary-color: #326e51;
+        --danger-color: #d32f2f;
+        --bg-light: #f4f7f6;
+    }
+
+    body {
+        background-color: var(--bg-light);
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    /* Header & Tiêu đề */
+    h2 {
+        color: var(--primary-color);
+        font-weight: 800;
+        text-align: center;
+        margin-top: 40px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    .warning-box {
+        background-color: #fff5f5;
+        border-left: 5px solid var(--danger-color);
+        padding: 15px;
+        margin: 20px auto;
+        max-width: 850px;
+        border-radius: 4px;
+        display: flex;
+        align-items: center;
+        gap: 15px;
+    }
+
+    .warning-text {
+        color: var(--danger-color);
+        margin: 0;
+        font-weight: 600;
+        font-size: 16px;
+    }
+
+    /* Card chứa nội dung */
+    .delete-card {
+        background: #fff;
+        border-radius: 15px;
+        max-width: 850px;
+        margin: 0 auto 50px auto;
+        padding: 40px;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+        border: 1px solid #e2e8f0;
+    }
+
+    /* Bố cục thông tin */
+    .delete-container {
+        display: flex;
+        gap: 40px;
+        align-items: flex-start;
+    }
+
+    .product-preview {
+        flex: 0 0 280px;
+        text-align: center;
+    }
+
+    .product-preview img {
+        width: 100%;
+        height: auto;
+        border-radius: 12px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        border: 1px solid #f1f5f9;
+    }
+
+    .product-id-badge {
+        display: inline-block;
+        margin-top: 15px;
+        padding: 5px 15px;
+        background: #f0fdf4;
+        color: var(--primary-color);
+        border-radius: 20px;
+        font-weight: 700;
+        font-size: 14px;
+    }
+
+    .product-details {
+        flex: 1;
+    }
+
+    /* Định dạng danh sách thông tin */
+    .info-group {
+        margin-bottom: 15px;
+        border-bottom: 1px dashed #e2e8f0;
+        padding-bottom: 10px;
+        display: flex;
+    }
+
+    .info-label {
+        color: #64748b;
+        font-weight: 600;
+        width: 140px;
+        flex-shrink: 0;
+    }
+
+    .info-value {
+        color: #1e293b;
+        font-weight: 500;
+    }
+
+    /* Nút bấm */
+    .action-area {
+        margin-top: 30px;
+        padding-top: 30px;
+        border-top: 2px solid #f1f5f9;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 15px;
+    }
+
+    .btn-delete-final {
+        background-color: var(--danger-color);
+        color: white !important;
+        padding: 14px 50px;
+        border-radius: 10px;
+        border: none;
+        font-weight: 800;
+        font-size: 16px;
+        transition: all 0.3s;
+        cursor: pointer;
+        width: 100%;
+        max-width: 300px;
+    }
+
+    .btn-delete-final:hover {
+        background-color: #b71c1c;
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(211, 47, 47, 0.3);
+    }
+
+    .btn-cancel {
+        color: #64748b;
+        text-decoration: none;
+        font-weight: 600;
+        transition: 0.2s;
+    }
+
+    .btn-cancel:hover {
+        color: var(--primary-color);
+    }
+
+    /* Responsive */
+    @@media (max-width: 768px) {
+        .delete-container {
+            flex-direction: column;
+            align-items: center;
+        }
+        .product-preview {
+            flex: 0 0 auto;
+            width: 100%;
+        }
+    }
+</style>
+
+<h2>Xác nhận xóa sản phẩm</h2>
+
+<div class="warning-box">
+    <i class="fa fa-exclamation-triangle" style="color: var(--danger-color); font-size: 24px;"></i>
+    <p class="warning-text">
+        Hành động này không thể hoàn tác. Bạn có chắc chắn muốn xóa vĩnh viễn sản phẩm này?
+    </p>
+</div>
+
+<div class="delete-card">
+    <div class="delete-container">
+        <div class="product-preview">
+            <img src="~/Content/Images/@(string.IsNullOrEmpty(Model.sHinhAnh) ? "no-image.png" : Model.sHinhAnh)" alt="Product Image" />
+            <div class="product-id-badge">Mã SP: @Model.PK_sMaSP</div>
+        </div>
+
+        <div class="product-details">
+            <div class="info-group">
+                <span class="info-label">Tên mỹ phẩm:</span>
+                <span class="info-value" style="font-size: 18px; color: var(--primary-color); font-weight: 700;">@Model.sTenSP</span>
+            </div>
+
+            <div class="info-group">
+                <span class="info-label">Danh mục:</span>
+                <span class="info-value">@Model.tbl_DanhMuc.sTenDM</span>
+            </div>
+
+            <div class="info-group">
+                <span class="info-label">Nhà cung cấp:</span>
+                <span class="info-value">@Model.tbl_NhaCungCap.sTenNCC</span>
+            </div>
+
+            <div class="info-group">
+                <span class="info-label">Giá bán:</span>
+                <span class="info-value" style="color: var(--danger-color); font-weight: 700;">@string.Format("{0:N0}", Model.fGiaBan) VNĐ</span>
+            </div>
+
+            <div class="info-group">
+                <span class="info-label">Số lượng tồn:</span>
+                <span class="info-value">@Model.iSoLuongTon sản phẩm</span>
+            </div>
+
+            <div class="info-group" style="border:none">
+                <span class="info-label">Màu sắc:</span>
+                <span class="info-value">@Model.sMauSac</span>
+            </div>
+        </div>
+    </div>
+
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="action-area">
+            <button type="submit" class="btn-delete-final">
+                <i class="fa fa-trash-alt"></i> ĐỒNG Ý XÓA VĨNH VIỄN
+            </button>
+            <a href="@Url.Action("Index")" class="btn-cancel">
+                <i class="fa fa-arrow-left"></i> Không, quay lại danh sách
+            </a>
+        </div>
+    }
+</div>

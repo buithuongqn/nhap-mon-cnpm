@@ -1,0 +1,231 @@
+﻿@model Nhom9_QLBanMyPham.Models.BaoCaoViewModel
+
+@{
+    ViewBag.Title = "Thống kê doanh thu";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    .report-container {
+        padding: 15px;
+        background: #f8f9fa;
+    }
+
+    /* 1. Thẻ thống kê */
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 20px;
+        margin-bottom: 25px;
+    }
+
+    .card-stat {
+        background: white;
+        padding: 25px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        border-left: 5px solid #326e51;
+    }
+
+        .card-stat i {
+            font-size: 2.2rem;
+            color: #326e51;
+            opacity: 0.3;
+        }
+
+        .card-stat h3 {
+            margin: 5px 0;
+            font-size: 1.6rem;
+            color: #333;
+            font-weight: bold;
+        }
+
+        .card-stat p {
+            margin: 0;
+            color: #777;
+            font-size: 0.85rem;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+    /* 2. BỘ LỌC HÀNG NGANG (Tối ưu ở đây) */
+    .filter-card {
+        background: white;
+        padding: 15px 25px;
+        border-radius: 12px;
+        margin-bottom: 25px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    }
+
+    .filter-form-horizontal {
+        display: flex;
+        align-items: center; /* Căn giữa theo chiều dọc */
+        flex-wrap: wrap; /* Tự xuống dòng nếu màn hình quá nhỏ */
+        gap: 15px; /* Khoảng cách giữa các phần tử */
+    }
+
+    .filter-group {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+        .filter-group label {
+            margin-bottom: 0;
+            font-weight: bold;
+            color: #555;
+            white-space: nowrap;
+        }
+
+        .filter-group input {
+            width: 160px !important;
+        }
+
+    .btn-filter {
+        background: #326e51;
+        color: white;
+        border: none;
+        padding: 8px 20px;
+        border-radius: 6px;
+        font-weight: 500;
+    }
+
+        .btn-filter:hover {
+            background: #26523d;
+            color: white;
+        }
+
+    /* 3. Biểu đồ và Bảng */
+    .chart-section {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: 20px;
+    }
+
+    .chart-card, .table-card {
+        background: white;
+        padding: 20px;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    }
+</style>
+
+<div class="report-container">
+    <h2 class="mb-4"><i class="fas fa-chart-line"></i> Phân tích kinh doanh</h2>
+
+    <div class="stats-grid">
+        <div class="card-stat">
+            <div><p>Tổng doanh thu</p><h3>@String.Format("{0:0,0}", Model.TongDoanhThu) đ</h3></div>
+            <i class="fas fa-wallet"></i>
+        </div>
+        <div class="card-stat" style="border-left-color: #3498db;">
+            <div><p>Đơn hàng</p><h3>@Model.TongDonHang</h3></div>
+            <i class="fas fa-shopping-cart" style="color: #3498db;"></i>
+        </div>
+        <div class="card-stat" style="border-left-color: #f1c40f;">
+            <div><p>Khách hàng</p><h3>@Model.SoKhachHang</h3></div>
+            <i class="fas fa-users" style="color: #f1c40f;"></i>
+        </div>
+        <div class="card-stat" style="border-left-color: #e67e22;">
+            <div><p>Trung bình đơn</p><h3>@String.Format("{0:0,0}", Model.GiaTriTrungBinhDon) đ</h3></div>
+            <i class="fas fa-chart-pie" style="color: #e67e22;"></i>
+        </div>
+    </div>
+
+    <div class="filter-card">
+        <form method="get" action="@Url.Action("Index", "BaoCao")" class="filter-form-horizontal">
+            <span class="mr-2 text-muted"><i class="fas fa-calendar-alt"></i> Khoảng thời gian:</span>
+
+            <div class="filter-group">
+                <label>Từ</label>
+                <input type="date" name="tuNgay" class="form-control" value="@ViewBag.TuNgay" />
+            </div>
+
+            <div class="filter-group">
+                <label>Đến</label>
+                <input type="date" name="denNgay" class="form-control" value="@ViewBag.DenNgay" />
+            </div>
+
+            <button type="submit" class="btn btn-filter ml-md-3">
+                <i class="fas fa-filter"></i> Lọc dữ liệu
+            </button>
+
+            <a href="@Url.Action("Index", "BaoCao")" class="btn btn-outline-secondary ml-1">
+                <i class="fas fa-undo"></i> Làm mới
+            </a>
+        </form>
+    </div>
+
+    <div class="chart-section">
+        <div class="chart-card">
+            <h5 class="mb-4 font-weight-bold">Xu hướng doanh thu</h5>
+            <div style="height: 350px;">
+                <canvas id="revenueChart"></canvas>
+            </div>
+        </div>
+
+        <div class="table-card">
+            <h5 class="mb-4 font-weight-bold">Top sản phẩm bán chạy</h5>
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr><th>Tên SP</th><th class="text-center">SL</th><th class="text-right">Doanh thu</th></tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var sp in Model.SanPhamBanChay)
+                        {
+                            <tr>
+                                <td><small class="font-weight-bold">@sp.TenSP</small></td>
+                                <td class="text-center">@sp.SoLuongDaBan</td>
+                                <td class="text-right text-success font-weight-bold">@String.Format("{0:n0}", sp.DoanhThu)</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const labels = @Html.Raw(Json.Encode(Model.BieuDoDoanhThu.Select(x => x.Thang)));
+            const dataValues = @Html.Raw(Json.Encode(Model.BieuDoDoanhThu.Select(x => x.DoanhThu)));
+
+            const ctx = document.getElementById('revenueChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Doanh thu (VNĐ)',
+                        data: dataValues,
+                        borderColor: '#326e51',
+                        backgroundColor: 'rgba(50, 110, 81, 0.1)',
+                        borderWidth: 3,
+                        pointRadius: 4,
+                        pointBackgroundColor: '#326e51',
+                        fill: true,
+                        tension: 0.3
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: { callback: (value) => value.toLocaleString('vi-VN') + ' đ' }
+                        }
+                    },
+                    plugins: { legend: { display: false } }
+                }
+            });
+        });
+    </script>
+}

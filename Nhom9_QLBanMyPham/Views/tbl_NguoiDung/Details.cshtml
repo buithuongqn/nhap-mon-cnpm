@@ -1,0 +1,67 @@
+﻿@model Nhom9_QLBanMyPham.Models.tbl_NguoiDung
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>tbl_NguoiDung</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.sTenNV)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.sTenNV)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.sSDT)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.sSDT)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.sVaiTro)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.sVaiTro)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.sMatKhau)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.sMatKhau)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.sPhanQuyen)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.sPhanQuyen)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.fLuong)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.fLuong)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.PK_sMaNV }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

@@ -1,0 +1,174 @@
+﻿@model Nhom9_QLBanMyPham.Models.tbl_NguoiDung
+
+@{
+    ViewBag.Title = "Chỉnh sửa nhân viên";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    /* Khung thẻ bao ngoài */
+    .edit-card {
+        max-width: 800px;
+        margin: 30px auto;
+        background: #fff;
+        padding: 40px;
+        border-radius: 15px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+        border-top: 6px solid #f48fb1; /* Màu hồng nhẹ cho Edit */
+    }
+
+    /* Tiêu đề */
+    h2 {
+        color: #e91e63;
+        font-weight: bold;
+        text-align: center;
+        text-transform: uppercase;
+        margin-bottom: 5px;
+    }
+
+    h4 {
+        text-align: center;
+        color: #888;
+        font-weight: normal;
+        margin-bottom: 30px;
+    }
+
+    /* Nhãn dán label */
+    .control-label {
+        color: #e91e63;
+        font-weight: 600 !important;
+    }
+
+    /* Ô nhập liệu */
+    .form-control {
+        border-radius: 8px;
+        border: 1px solid #f8bbd0;
+        transition: all 0.3s;
+        height: 40px;
+    }
+
+        .form-control:focus {
+            border-color: #e91e63;
+            box-shadow: 0 0 8px rgba(233, 30, 99, 0.2);
+        }
+
+    /* Nút Lưu (Save) */
+    .btn-save {
+        background-color: #e91e63;
+        color: white;
+        padding: 12px 30px;
+        border-radius: 25px;
+        border: none;
+        font-weight: bold;
+        width: 100%;
+        font-size: 16px;
+        transition: 0.3s;
+        cursor: pointer;
+    }
+
+        .btn-save:hover {
+            background-color: #c2185b;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(233, 30, 99, 0.3);
+        }
+
+    /* Nút Quay lại */
+    .back-link {
+        display: inline-block;
+        margin-top: 20px;
+        color: #888;
+        text-decoration: none;
+        transition: 0.3s;
+    }
+
+        .back-link:hover {
+            color: #e91e63;
+        }
+
+    /* Thông tin mã nhân viên (không cho sửa) */
+    .ma-nv-display {
+        background-color: #f5f5f5;
+        font-weight: bold;
+        color: #555;
+    }
+</style>
+
+<div class="edit-card">
+    <h2>Cập Nhật Thông Tin</h2>
+    <h4>Chỉnh sửa chi tiết nhân viên: @Model.PK_sMaNV</h4>
+    <hr />
+
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-horizontal">
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            @* Giữ nguyên mã nhân viên ẩn để gửi về Server *@
+            @Html.HiddenFor(model => model.PK_sMaNV)
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.sTenNV, "Họ và tên", htmlAttributes: new { @class = "control-label col-md-3" })
+                <div class="col-md-9">
+                    @Html.EditorFor(model => model.sTenNV, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.sTenNV, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.sSDT, "Số điện thoại", htmlAttributes: new { @class = "control-label col-md-3" })
+                <div class="col-md-9">
+                    @Html.EditorFor(model => model.sSDT, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.sSDT, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.sVaiTro, "Chức vụ", htmlAttributes: new { @class = "control-label col-md-3" })
+                <div class="col-md-9">
+                    @Html.EditorFor(model => model.sVaiTro, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.sVaiTro, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.sMatKhau, "Mật khẩu", htmlAttributes: new { @class = "control-label col-md-3" })
+                <div class="col-md-9">
+                    @Html.EditorFor(model => model.sMatKhau, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.sMatKhau, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.sPhanQuyen, "Phân quyền", htmlAttributes: new { @class = "control-label col-md-3" })
+                <div class="col-md-9">
+                    @* Sử dụng DropDownList để tránh nhập sai tên quyền *@
+                    @Html.DropDownListFor(model => model.sPhanQuyen, new SelectList(new[] { "Admin", "NhanVien" }), new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.sPhanQuyen, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.fLuong, "Lương cơ bản", htmlAttributes: new { @class = "control-label col-md-3" })
+                <div class="col-md-9">
+                    @Html.EditorFor(model => model.fLuong, new { htmlAttributes = new { @class = "form-control", type = "number" } })
+                    @Html.ValidationMessageFor(model => model.fLuong, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-offset-3 col-md-9">
+                    <button type="submit" class="btn-save">
+                        <i class="glyphicon glyphicon-check"></i> LƯU THAY ĐỔI
+                    </button>
+                </div>
+            </div>
+        </div>
+    }
+
+    <div class="text-center">
+        <a href="@Url.Action("Index")" class="back-link">
+            <i class="glyphicon glyphicon-arrow-left"></i> Quay lại danh sách
+        </a>
+    </div>
+</div>

@@ -1,0 +1,232 @@
+﻿@model Nhom9_QLBanMyPham.Models.tbl_DonHang
+
+@{
+    ViewBag.Title = "Xác nhận xóa đơn hàng";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    :root {
+        --primary-color: #326e51;
+        --primary-light: #f0fdf4;
+        --text-main: #1e293b;
+        --danger: #d32f2f;
+        --border-color: #cbd5e1;
+    }
+
+    /* Tổng thể container */
+    .invoice-container {
+        background-color: #fff;
+        padding: 40px;
+        border-radius: 20px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+        margin-top: 30px;
+        border-top: 8px solid var(--primary-color);
+        border-left: 1px solid var(--border-color);
+        border-right: 1px solid var(--border-color);
+        border-bottom: 1px solid var(--border-color);
+    }
+
+    /* Tiêu đề */
+    .header-title {
+        color: var(--primary-color);
+        font-weight: 800;
+        border-bottom: 2px solid var(--primary-light);
+        padding-bottom: 15px;
+        margin-bottom: 25px;
+        text-transform: uppercase;
+        font-size: 24px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    /* Vùng thông tin chung */
+    .info-section {
+        background: var(--primary-light);
+        padding: 20px;
+        border-radius: 12px;
+        margin-bottom: 25px;
+        border: 1px solid #dcfce7;
+    }
+
+        .info-section p {
+            margin-bottom: 8px;
+            font-size: 15px;
+            color: #334155;
+        }
+
+    /* Box tổng tiền - Đã đổi từ Đỏ sang Xanh đen đậm */
+    .total-box {
+        font-size: 1.6em;
+        font-weight: 800;
+        color: #1a202c; /* Màu đen xanh than sang trọng */
+        text-align: right;
+        padding: 20px;
+        background: #f8fafc;
+        border-radius: 12px;
+        border: 2px dashed var(--primary-color);
+        margin-top: 20px;
+    }
+
+    .total-amount {
+        color: var(--primary-color);
+    }
+
+    /* Thông báo cảnh báo */
+    .alert-warning-custom {
+        background-color: #fffbeb;
+        color: #92400e;
+        padding: 20px;
+        border-radius: 12px;
+        margin-bottom: 30px;
+        border: 1px solid #fde68a;
+        display: flex;
+        align-items: center;
+        gap: 15px;
+    }
+
+    /* Tùy chỉnh bảng */
+    .table-custom {
+        border-radius: 10px;
+        overflow: hidden;
+        border: 1px solid var(--border-color);
+    }
+
+        .table-custom thead tr {
+            background-color: var(--primary-color) !important;
+        }
+
+        .table-custom thead th {
+            color: white !important;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 13px;
+            border: none !important;
+            padding: 12px;
+        }
+
+    /* Badge trạng thái */
+    .status-badge {
+        background-color: var(--danger);
+        color: white;
+        padding: 6px 12px;
+        border-radius: 20px;
+        font-weight: bold;
+        font-size: 12px;
+        display: inline-block;
+    }
+
+    /* Nút bấm */
+    .btn-delete-confirm {
+        background-color: var(--danger) !important;
+        color: white !important;
+        border-radius: 12px;
+        font-weight: 700;
+        padding: 12px 30px;
+        transition: 0.3s;
+        border: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+        .btn-delete-confirm:hover {
+            background-color: #b91c1c !important;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(211, 47, 47, 0.3);
+        }
+
+    .btn-cancel-custom {
+        background-color: white;
+        color: #64748b !important;
+        border: 2px solid #e2e8f0;
+        border-radius: 12px;
+        font-weight: 600;
+        padding: 12px 30px;
+        transition: 0.3s;
+        text-decoration: none !important;
+        margin-right: 10px;
+        display: inline-block;
+    }
+
+        .btn-cancel-custom:hover {
+            background-color: #f1f5f9;
+            color: var(--text-main) !important;
+        }
+</style>
+
+<div class="container">
+    <div class="invoice-container">
+        <div class="alert-warning-custom">
+            <i class="fa fa-exclamation-triangle" style="font-size: 30px;"></i>
+            <div>
+                <h4 style="margin: 0; font-weight: 800;">XÁC NHẬN HỦY VÀ XÓA ĐƠN HÀNG?</h4>
+                <p style="margin: 5px 0 0 0;">Hệ thống sẽ tự động <b>hoàn trả số lượng sản phẩm</b> vào lại kho hàng sau khi xóa.</p>
+            </div>
+        </div>
+
+        <h2 class="header-title">
+            <i class="fa fa-file-invoice"></i> CHI TIẾT HÓA ĐƠN #@Model.PK_iMaDH
+        </h2>
+
+        <div class="row info-section">
+            <div class="col-md-6">
+                <p><b><i class="fa fa-user"></i> Khách hàng:</b> @(Model.tbl_KhachHang != null ? Model.tbl_KhachHang.sTenKH : "Khách hàng vãng lai")</p>
+                <p><b><i class="fa fa-user-shield"></i> Nhân viên xử lý:</b> @(Model.tbl_NguoiDung != null ? Model.tbl_NguoiDung.sTenNV : "Quản trị viên")</p>
+            </div>
+            <div class="col-md-6 text-right">
+                <p><b><i class="fa fa-calendar-alt"></i> Thời gian lập:</b> @(Model.dNgayLap.HasValue ? Model.dNgayLap.Value.ToString("dd/MM/yyyy HH:mm") : "---")</p>
+                <span class="status-badge"><i class="fa fa-trash-alt"></i> YÊU CẦU XÓA DỮ LIỆU</span>
+            </div>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table table-custom">
+                <thead>
+                    <tr>
+                        <th class="text-center" width="70">STT</th>
+                        <th>Tên sản phẩm mỹ phẩm</th>
+                        <th class="text-center" width="120">Số lượng</th>
+                        <th class="text-right" width="180">Thành tiền</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{ int stt = 1; }
+                    @foreach (var item in Model.tbl_CTDonHang)
+                    {
+                        <tr>
+                            <td class="text-center">@(stt++)</td>
+                            <td style="font-weight: 600; color: var(--text-main);">
+                                @(item.tbl_SanPham != null ? item.tbl_SanPham.sTenSP : item.PK_sMaSP_CTDonHang)
+                            </td>
+                            <td class="text-center">@item.iSoLuongBan</td>
+                            <td class="text-right" style="font-weight: 700; color: #334155;">
+                                @string.Format("{0:N0}", item.iSoLuongBan * item.fGiaBanLucDo) đ
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        <div class="total-box">
+            TỔNG TIỀN HOÀN KHO: <span class="total-amount">@string.Format("{0:N0}", Model.fTongTien) VNĐ</span>
+        </div>
+
+        <div style="margin-top: 40px; border-top: 1px solid #f1f5f9; padding-top: 30px;">
+            @using (Html.BeginForm("Delete", "tbl_DonHang", new { id = Model.PK_iMaDH }, FormMethod.Post))
+            {
+                @Html.AntiForgeryToken()
+                <div class="text-right">
+                    <a href="@Url.Action("Index")" class="btn-cancel-custom">
+                        HỦY BỎ & QUAY LẠI
+                    </a>
+                    <button type="submit" class="btn-delete-confirm">
+                        <i class="fa fa-trash-alt"></i> XÁC NHẬN XÓA VĨNH VIỄN
+                    </button>
+                </div>
+            }
+        </div>
+    </div>
+</div>

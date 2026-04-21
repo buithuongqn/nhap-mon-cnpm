@@ -1,0 +1,310 @@
+﻿@model Nhom9_QLBanMyPham.Models.tbl_DonHang
+
+@{
+    ViewBag.Title = "Hóa đơn " + Model.PK_iMaDH;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    /* ==========================================================================
+       1. GIAO DIỆN HIỂN THỊ TRÊN WEB (SCREEN)
+       ========================================================================== */
+    :root {
+        --primary-green: #326e51;
+        --soft-bg: #f8fafc;
+        --text-main: #1e293b;
+    }
+
+    .invoice-body-wrapper {
+        background: #e2e8f0;
+        padding: 40px 0;
+        min-height: 100vh;
+    }
+
+    .invoice-container {
+        background: #fff;
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 50px;
+        border-radius: 4px;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        color: var(--text-main);
+        line-height: 1.6;
+    }
+
+    /* Tiêu đề & Header */
+    .inv-header {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 40px;
+        border-bottom: 2px solid var(--primary-green);
+        padding-bottom: 20px;
+    }
+
+    .brand-box h1 {
+        margin: 0;
+        color: var(--primary-green);
+        font-size: 26px;
+        font-weight: 800;
+    }
+
+    .brand-box p {
+        margin: 2px 0;
+        font-size: 13px;
+        color: #64748b;
+    }
+
+    .title-box {
+        text-align: right;
+    }
+
+        .title-box h2 {
+            margin: 0;
+            font-size: 30px;
+            color: #94a3b8;
+            letter-spacing: 2px;
+        }
+
+    /* Thông tin khách hàng */
+    .info-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+        margin-bottom: 30px;
+    }
+
+    .info-item label {
+        display: block;
+        font-size: 11px;
+        text-transform: uppercase;
+        color: #94a3b8;
+        font-weight: bold;
+    }
+
+    .info-item p {
+        margin: 0;
+        font-weight: 600;
+    }
+
+    /* Bảng sản phẩm */
+    .inv-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 30px;
+    }
+
+        .inv-table th {
+            background: var(--soft-bg);
+            padding: 12px;
+            border-bottom: 2px solid #e2e8f0;
+            text-align: left;
+            font-size: 13px;
+        }
+
+        .inv-table td {
+            padding: 15px 12px;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+    /* Tổng tiền */
+    .summary-box {
+        margin-left: auto;
+        width: 320px;
+    }
+
+    .summary-row {
+        display: flex;
+        justify-content: space-between;
+        padding: 5px 0;
+    }
+
+        .summary-row.grand-total {
+            border-top: 2px solid var(--primary-green);
+            margin-top: 10px;
+            padding-top: 10px;
+            font-weight: bold;
+            font-size: 18px;
+            color: var(--primary-green);
+        }
+
+    /* Chữ ký */
+    .sig-section {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        margin-top: 50px;
+        text-align: center;
+    }
+
+    .sig-box {
+        height: 120px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+    /* Nút bấm */
+    .action-bar {
+        max-width: 800px;
+        margin: 20px auto;
+        display: flex;
+        gap: 10px;
+        justify-content: center;
+    }
+
+    .btn-action {
+        padding: 10px 20px;
+        border-radius: 6px;
+        text-decoration: none;
+        font-weight: bold;
+        border: none;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .btn-print {
+        background: var(--primary-green);
+        color: white;
+    }
+
+    .btn-back {
+        background: #fff;
+        color: #64748b;
+        border: 1px solid #cbd5e1;
+    }
+
+    /* ==========================================================================
+       2. CẤU HÌNH IN (FIX LỖI ĐÈ ICON MENU)
+       ========================================================================== */
+    @@media print {
+        /* Ẩn tất cả mọi thứ trên trang Layout (Sidebar, Navbar, Footer của Web) */
+        body * {
+            visibility: hidden;
+        }
+        /* Chỉ hiển thị vùng hóa đơn */
+        .invoice-container, .invoice-container * {
+            visibility: visible;
+        }
+        /* Đẩy hóa đơn lên sát đầu trang giấy */
+        .invoice-container {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            box-shadow: none;
+            padding: 0;
+        }
+        /* Loại bỏ hoàn toàn các vùng dư thừa khác */
+        .no-print, .action-bar, .sidebar, header, footer, [class*="sidebar"], [class*="menu"] {
+            display: none !important;
+        }
+        /* Định dạng trang in */
+        @@page {
+            size: A4;
+            margin: 15mm;
+        }
+    }
+</style>
+
+<div class="invoice-body-wrapper">
+    <div class="action-bar no-print">
+        <a href="@Url.Action("Index")" class="btn-action btn-back">
+            ← Quay lại danh sách
+        </a>
+        <button onclick="window.print()" class="btn-action btn-print">
+            In hóa đơn (PDF)
+        </button>
+    </div>
+
+    <div class="invoice-container">
+        <div class="inv-header">
+            <div class="brand-box">
+                <h1>Cửa hàng HASAKI Shop</h1>
+                <p>Địa chỉ: 123 Cầu Giấy, Hà Nội</p>
+                <p>Hotline: 0987.654.321 | Web: myphamnhom9.vn</p>
+            </div>
+            <div class="title-box">
+                <h2>HÓA ĐƠN</h2>
+                <p style="margin:0">Mã: <strong>DH-@Model.PK_iMaDH</strong></p>
+            </div>
+        </div>
+
+        <div class="info-grid">
+            <div class="info-item">
+                <label>Khách hàng</label>
+                <p>@(Model.tbl_KhachHang != null ? Model.tbl_KhachHang.sTenKH : "Khách lẻ")</p>
+                @if (Model.tbl_KhachHang != null)
+                {<p style="font-weight:normal; font-size: 13px;">SĐT: @Model.tbl_KhachHang.sSDT</p>}
+            </div>
+            <div class="info-item" style="text-align: right;">
+                <label>Ngày lập</label>
+                <p>@Model.dNgayLap.Value.ToString("dd/MM/yyyy HH:mm")</p>
+                <label style="margin-top:10px">Nhân viên bán hàng</label>
+                <p>@Model.tbl_NguoiDung.sTenNV</p>
+            </div>
+        </div>
+
+        <table class="inv-table">
+            <thead>
+                <tr>
+                    <th style="width: 40px; text-align: center;">STT</th>
+                    <th>Tên sản phẩm</th>
+                    <th style="text-align: center;">SL</th>
+                    <th style="text-align: right;">Đơn giá</th>
+                    <th style="text-align: right;">Thành tiền</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{ int stt = 1; }
+                @foreach (var item in Model.tbl_CTDonHang)
+                {
+                    <tr>
+                        <td style="text-align: center;">@(stt++)</td>
+                        <td><strong>@item.tbl_SanPham.sTenSP</strong></td>
+                        <td style="text-align: center;">@item.iSoLuongBan</td>
+                        <td style="text-align: right;">@item.fGiaBanLucDo.ToString("N0") đ</td>
+                        <td style="text-align: right;"><strong>@((item.iSoLuongBan * item.fGiaBanLucDo).ToString("N0")) đ</strong></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+        <div class="summary-box">
+            <div class="summary-row">
+                <span>Tổng tiền hàng:</span>
+                <span>@Model.fTongTien.Value.ToString("N0") đ</span>
+            </div>
+            <div class="summary-row">
+                <span>Chiết khấu:</span>
+                <span>0 đ</span>
+            </div>
+            <div class="summary-row grand-total">
+                <span>TỔNG THANH TOÁN:</span>
+                <span>@Model.fTongTien.Value.ToString("N0") đ</span>
+            </div>
+        </div>
+
+        <p style="margin-top: 25px; font-size: 14px; font-style: italic;">
+            Bằng chữ: .................................................................................................................
+        </p>
+
+        <div class="sig-section">
+            <div class="sig-box">
+                <p><strong>Khách hàng</strong></p>
+                <p style="font-size: 12px; font-style: italic;">(Ký và ghi rõ họ tên)</p>
+            </div>
+            <div class="sig-box">
+                <p><strong>Người lập hóa đơn</strong></p>
+                <p style="font-size: 12px; font-style: italic;">(Ký và ghi rõ họ tên)</p>
+                <p><strong>@Model.tbl_NguoiDung.sTenNV</strong></p>
+            </div>
+        </div>
+
+        <div style="text-align: center; margin-top: 60px; border-top: 1px dashed #cbd5e1; padding-top: 20px; font-size: 13px; color: #64748b;">
+            <p>Cảm ơn Quý khách đã mua sắm tại Nhóm 9 Cosmetic!</p>
+            <p>Vui lòng giữ hóa đơn để đổi trả sản phẩm trong vòng 7 ngày.</p>
+        </div>
+    </div>
+</div>

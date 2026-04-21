@@ -1,0 +1,291 @@
+﻿@model Nhom9_QLBanMyPham.Models.tbl_SanPham
+
+@{
+    ViewBag.Title = "Thêm mới sản phẩm";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    :root {
+        --primary-color: #326e51;
+        --primary-hover: #26553e;
+        --bg-light: #f4f7f6;
+        --border-color: #cbd5e1;
+    }
+
+    body {
+        background-color: var(--bg-light);
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    /* Tiêu đề trang */
+    .header-section {
+        margin: 30px 0;
+        text-align: center;
+    }
+
+        .header-section h2 {
+            color: var(--primary-color);
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            display: inline-block;
+            border-bottom: 4px solid var(--primary-color);
+            padding-bottom: 10px;
+        }
+
+    /* Card bao ngoài */
+    .create-card {
+        background: #fff;
+        border-radius: 15px;
+        max-width: 1100px;
+        margin: 0 auto 50px auto;
+        padding: 40px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+        border: none;
+    }
+
+    /* Phân đoạn thông tin */
+    .section-title {
+        color: var(--primary-color);
+        font-size: 18px;
+        font-weight: 700;
+        border-left: 5px solid var(--primary-color);
+        padding-left: 15px;
+        margin-bottom: 25px;
+        margin-top: 30px;
+        background: #f0fdf4;
+        padding-top: 8px;
+        padding-bottom: 8px;
+        border-radius: 0 8px 8px 0;
+    }
+
+    /* Label & Input */
+    .control-label {
+        color: #334155;
+        font-weight: 600 !important;
+        margin-bottom: 8px;
+        display: block;
+    }
+
+    .form-control {
+        border-radius: 10px !important;
+        border: 2px solid #e2e8f0 !important;
+        height: 48px;
+        transition: all 0.3s;
+        font-size: 15px;
+    }
+
+        .form-control:focus {
+            border-color: var(--primary-color) !important;
+            box-shadow: 0 0 0 4px rgba(50, 110, 81, 0.1) !important;
+            outline: none;
+        }
+
+    /* Khu vực Upload Ảnh */
+    .upload-box {
+        border: 2px dashed var(--primary-color);
+        background: #fcfdfc;
+        border-radius: 15px;
+        padding: 25px;
+        text-align: center;
+        min-height: 350px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        transition: 0.3s;
+    }
+
+        .upload-box:hover {
+            background: #f0fdf4;
+        }
+
+    #img-preview {
+        max-width: 100%;
+        max-height: 250px;
+        border-radius: 12px;
+        margin-top: 20px;
+        display: none;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        border: 1px solid var(--border-color);
+    }
+
+    /* Nút bấm */
+    .btn-submit {
+        background: var(--primary-color);
+        color: white;
+        border: none;
+        padding: 15px 60px;
+        border-radius: 12px;
+        font-weight: 700;
+        font-size: 17px;
+        transition: 0.3s;
+        cursor: pointer;
+    }
+
+        .btn-submit:hover {
+            background: var(--primary-hover);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(50, 110, 81, 0.3);
+        }
+
+    .back-link {
+        color: #64748b;
+        font-weight: 600;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        transition: 0.2s;
+    }
+
+        .back-link:hover {
+            color: var(--primary-color);
+        }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+</style>
+
+<div class="header-section">
+    <h2><i class="fa fa-plus-circle"></i> Thêm Sản Phẩm Mới</h2>
+</div>
+
+<div class="create-card">
+    @* SỬA LẠI: Form bao quát toàn bộ nội dung nhập liệu *@
+    @using (Html.BeginForm("Create", "tbl_SanPham", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+        <div class="row">
+            <div class="col-md-7">
+                <div class="section-title" style="margin-top:0">
+                    <i class="fa fa-info-circle"></i> 1. Thông tin cơ bản
+                </div>
+
+                <div class="row">
+                    <div class="col-md-5">
+                        <div class="form-group">
+                            <label class="control-label">Mã sản phẩm</label>
+                            @Html.EditorFor(model => model.PK_sMaSP, new { htmlAttributes = new { @class = "form-control", placeholder = "VD: SP001" } })
+                            @Html.ValidationMessageFor(model => model.PK_sMaSP, "", new { @class = "text-danger small" })
+                        </div>
+                    </div>
+                    <div class="col-md-7">
+                        <div class="form-group">
+                            <label class="control-label">Tên sản phẩm</label>
+                            @Html.EditorFor(model => model.sTenSP, new { htmlAttributes = new { @class = "form-control", placeholder = "Nhập tên đầy đủ..." } })
+                            @Html.ValidationMessageFor(model => model.sTenSP, "", new { @class = "text-danger small" })
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="control-label">Danh mục</label>
+                            @Html.DropDownList("FK_sMaDM_SanPham", null, "-- Chọn danh mục --", htmlAttributes: new { @class = "form-control" })
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="control-label">Nhà cung cấp</label>
+                            @Html.DropDownList("FK_sMaNCC_SanPham", null, "-- Chọn nhà cung cấp --", htmlAttributes: new { @class = "form-control" })
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label">Mô tả sản phẩm</label>
+                    @Html.TextAreaFor(model => model.sMoTa, new { @class = "form-control", @style = "height: 120px; resize: none;", placeholder = "Nhập mô tả chi tiết..." })
+                </div>
+
+                <div class="section-title">
+                    <i class="fa fa-tag"></i> 2. Giá cả & Kho hàng
+                </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label class="control-label">Giá bán (VNĐ)</label>
+                            @Html.EditorFor(model => model.fGiaBan, new { htmlAttributes = new { @class = "form-control", type = "number" } })
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label class="control-label">Số lượng nhập</label>
+                            @Html.EditorFor(model => model.iSoLuongTon, new { htmlAttributes = new { @class = "form-control", type = "number" } })
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label class="control-label">Dung tích</label>
+                            @Html.EditorFor(model => model.sDungTich, new { htmlAttributes = new { @class = "form-control", placeholder = "VD: 100ml" } })
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-5">
+                <div class="section-title" style="margin-top:0">
+                    <i class="fa fa-image"></i> 3. Hình ảnh sản phẩm
+                </div>
+                <div class="upload-box">
+                    <i class="fa fa-cloud-upload-alt" style="font-size: 40px; color: var(--primary-color); margin-bottom: 10px;"></i>
+                    <p style="color: #64748b; font-size: 14px; font-weight: 500;">Chọn ảnh chất lượng cao để hiển thị</p>
+
+                    @* LƯU Ý: Tên name="uploadImage" phải khớp với tham số trong Controller *@
+                    <input type="file" name="uploadImage" id="uploadImage" class="form-control" accept="image/*" style="padding-top: 7px;" />
+
+                    <img id="img-preview" src="#" alt="Xem trước ảnh" />
+                </div>
+
+                <div class="section-title">
+                    <i class="fa fa-plus-square"></i> 4. Thông tin khác
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Màu sắc chủ đạo</label>
+                    @Html.EditorFor(model => model.sMauSac, new { htmlAttributes = new { @class = "form-control" } })
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Ngày hết hạn</label>
+                    @Html.EditorFor(model => model.dNgayHetHan, new { htmlAttributes = new { @class = "form-control", type = "date" } })
+                </div>
+            </div>
+        </div>
+
+        <div style="text-align: center; margin-top: 40px; border-top: 2px solid #f1f5f9; padding-top: 30px;">
+            <button type="submit" class="btn-submit">
+                <i class="fa fa-save"></i> LƯU SẢN PHẨM MỚI
+            </button>
+            <div style="margin-top: 20px;">
+                <a href="@Url.Action("Index")" class="back-link">
+                    <i class="fa fa-arrow-left"></i> Quay lại danh sách
+                </a>
+            </div>
+        </div>
+    }
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script>
+        document.getElementById('uploadImage').onchange = function (evt) {
+            const [file] = this.files;
+            if (file) {
+                const preview = document.getElementById('img-preview');
+                preview.src = URL.createObjectURL(file);
+                preview.style.display = 'block';
+                preview.style.opacity = 0;
+                let opacity = 0;
+                const timer = setInterval(() => {
+                    if (opacity >= 1) clearInterval(timer);
+                    preview.style.opacity = opacity;
+                    opacity += 0.1;
+                }, 30);
+            }
+        };
+    </script>
+}

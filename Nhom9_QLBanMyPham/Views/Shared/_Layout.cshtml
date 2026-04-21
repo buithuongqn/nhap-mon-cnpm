@@ -1,0 +1,224 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - Hệ thống quản lý</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+
+    <style>
+        :root {
+            --xanh-chinh: #326e51;
+            --xanh-nhat: #eef4f1;
+            --xanh-hover: #3d8361;
+            --xanh-dam: #25523c;
+            --chu-trang: #ffffff;
+            /* Tăng chiều rộng sidebar lên 320px */
+            --sidebar-width: 320px;
+        }
+
+        body {
+            background-color: #f4f7f6;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            margin: 0;
+            display: flex;
+            /* Tăng cỡ chữ cơ bản của toàn trang */
+            font-size: 16px;
+        }
+
+        /* --- MENU DỌC (SIDEBAR) --- */
+        .sidebar {
+            width: var(--sidebar-width);
+            height: 100vh;
+            background-color: var(--xanh-chinh);
+            position: fixed;
+            left: 0;
+            top: 0;
+            color: white;
+            box-shadow: 4px 0 15px rgba(0,0,0,0.15);
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar-header {
+            /* Tăng padding và cỡ chữ tiêu đề thương hiệu */
+            padding: 40px 20px;
+            font-size: 1.8em;
+            font-weight: 800;
+            text-align: center;
+            letter-spacing: 2px;
+            background-color: var(--xanh-dam);
+            border-bottom: 2px solid rgba(255,255,255,0.05);
+        }
+
+        .sidebar-nav {
+            list-style: none;
+            padding: 20px 0;
+            margin: 0;
+        }
+
+            .sidebar-nav li a {
+                display: flex;
+                align-items: center;
+                /* Tăng khoảng cách nhấn của các mục menu */
+                padding: 20px 30px;
+                color: rgba(255,255,255,0.9);
+                text-decoration: none;
+                /* Tăng cỡ chữ menu */
+                font-size: 1.15em;
+                font-weight: 500;
+                transition: all 0.3s;
+                border-bottom: 1px solid rgba(255,255,255,0.03);
+            }
+
+                /* Định dạng Icon lớn hơn */
+                .sidebar-nav li a i {
+                    width: 45px;
+                    font-size: 1.5rem;
+                    margin-right: 15px;
+                    transition: transform 0.3s;
+                }
+
+                .sidebar-nav li a:hover {
+                    background-color: var(--xanh-hover);
+                    color: #fff;
+                    padding-left: 45px;
+                }
+
+                    .sidebar-nav li a:hover i {
+                        transform: scale(1.2);
+                        color: #ffd700;
+                    }
+
+        /* --- NỘI DUNG CHÍNH --- */
+        .main-content {
+            margin-left: var(--sidebar-width);
+            width: calc(100% - var(--sidebar-width));
+            padding: 30px;
+            transition: all 0.3s ease;
+        }
+
+        .body-content {
+            background: white;
+            padding: 40px; /* Tăng padding nội dung bên trong */
+            border-radius: 15px;
+            box-shadow: 0 6px 20px rgba(50, 110, 81, 0.1);
+            min-height: 88vh;
+        }
+
+        /* Tăng cỡ chữ cho các thẻ tiêu đề trong nội dung */
+        h2 {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: var(--xanh-chinh);
+        }
+
+        h3 {
+            font-size: 2em;
+        }
+
+        footer {
+            text-align: center;
+            color: #777;
+            padding: 30px 0;
+            font-size: 1.1em;
+        }
+
+        /* Nút bấm lớn hơn */
+        .btn-primary {
+            background-color: var(--xanh-chinh);
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            font-size: 1.1em;
+            font-weight: 600;
+        }
+
+        /* Đăng xuất nổi bật hơn */
+        .logout-item {
+            margin-top: 50px;
+        }
+
+            .logout-item a {
+                background-color: rgba(0,0,0,0.3) !important;
+                color: #ff8585 !important;
+                font-weight: bold !important;
+            }
+
+        /* Responsive cho Mobile */
+        @@media (max-width: 768px) {
+            :root {
+                --sidebar-width: 80px;
+            }
+
+            .sidebar-header span, .nav-text {
+                display: none;
+            }
+
+            .sidebar-nav li a i {
+                margin-right: 0;
+                width: 100%;
+                text-align: center;
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="sidebar">
+        <div class="sidebar-header">
+            <i class="fas fa-university"></i> <span>HASAKI</span>
+        </div>
+        <ul class="sidebar-nav">
+            <li>
+                <a href="@Url.Action("Index", "tbl_SanPham")">
+                    <i class="fas fa-cubes"></i>
+                    <span class="nav-text">Quản lý sản phẩm</span>
+                </a>
+            </li>
+            <li>
+                <a href="@Url.Action("Index", "tbl_DonHang")">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span class="nav-text">Quản lý bán hàng</span>
+                </a>
+            </li>
+            <li>
+                <a href="@Url.Action("Index", "tbl_NguoiDung")">
+                    <i class="fas fa-users-cog"></i>
+                    <span class="nav-text">Quản lý người dùng</span>
+                </a>
+            </li>
+            <li>
+                <a href="@Url.Action("Index", "BaoCao")">
+                    <i class="fas fa-chart-pie"></i>
+                    <span class="nav-text">Báo cáo & Thống kê</span>
+                </a>
+            </li>
+            <li class="logout-item">
+                <a href="@Url.Action("Login", "Account")">
+                    <i class="fas fa-power-off"></i>
+                    <span class="nav-text">ĐĂNG XUẤT</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+
+    <div class="main-content">
+        <div class="container-fluid body-content">
+            @RenderBody()
+            <hr />
+            <footer>
+                <p>&copy; @DateTime.Now.Year - <strong>Hệ Thống Quản Lý Nội Bộ HASAKI</strong></p>
+            </footer>
+        </div>
+    </div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+</body>
+</html>

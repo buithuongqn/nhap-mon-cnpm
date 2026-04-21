@@ -1,0 +1,127 @@
+﻿@model Nhom9_QLBanMyPham.Models.LoginViewModel
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Đăng nhập hệ thống - Mỹ Phẩm Nhóm 9</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #f1f8f5;
+            display: flex;
+            align-items: center;
+            justify-content: center; /* Căn giữa hoàn toàn */
+            height: 100vh;
+            margin: 0;
+        }
+
+        .login-panel {
+            width: 600px; /* Chiều ngang */
+            min-height: 600px; /* Chiều dọc bằng chiều ngang để tạo hình vuông */
+            background: white;
+            padding: 60px; /* Tăng padding để nội dung rộng rãi */
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            border-top: 10px solid #326e51;
+            /* Dùng Flexbox để giãn cách các phần tử bên trong theo chiều dọc */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        h2 {
+            color: #326e51;
+            font-weight: bold;
+            font-size: 40px;
+            margin-bottom: 50px; /* Tăng khoảng cách dưới tiêu đề */
+            text-align: center;
+            text-transform: uppercase;
+        }
+
+        .form-group {
+            margin-bottom: 30px; /* Tăng khoảng cách giữa các ô nhập liệu */
+        }
+
+            .form-group label {
+                color: #444;
+                font-size: 20px;
+                margin-bottom: 10px;
+            }
+
+        .form-control {
+            height: 60px; /* Ô nhập liệu cao hơn */
+            font-size: 18px;
+            border-radius: 8px;
+            padding-left: 15px;
+        }
+
+        .btn-custom {
+            background-color: #326e51;
+            color: white;
+            font-weight: bold;
+            font-size: 24px;
+            padding: 15px;
+            transition: 0.3s;
+            border-radius: 8px;
+            margin-top: 20px;
+            border: none;
+        }
+
+            .btn-custom:hover {
+                background-color: #25523c;
+                color: white;
+            }
+
+        .glyphicon {
+            color: #326e51;
+            margin-right: 10px;
+            font-size: 20px;
+        }
+
+        .text-danger {
+            font-size: 16px;
+            display: block;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="login-panel">
+        <h2>ĐĂNG NHẬP</h2>
+
+        @using (Html.BeginForm("Login", "Account", FormMethod.Post))
+        {
+            @Html.AntiForgeryToken()
+
+            if (!ViewData.ModelState.IsValid)
+            {
+                <div class="alert alert-danger" style="font-size: 16px; margin-bottom: 25px;">
+                    @Html.ValidationSummary(true, "")
+                </div>
+            }
+
+            <div class="form-group">
+                <label><i class="glyphicon glyphicon-user"></i> Tên đăng nhập</label>
+                @Html.TextBoxFor(m => m.Username, new { @class = "form-control", placeholder = "Nhập tên tài khoản admin..." })
+                @Html.ValidationMessageFor(m => m.Username, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="form-group">
+                <label><i class="glyphicon glyphicon-lock"></i> Mật khẩu</label>
+                @Html.PasswordFor(m => m.Password, new { @class = "form-control", placeholder = "Nhập mật khẩu..." })
+                @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
+            </div>
+
+            <div style="margin-top: 40px;">
+                <button type="submit" class="btn btn-custom btn-block">ĐĂNG NHẬP</button>
+            </div>
+        }
+    </div>
+
+</body>
+</html>

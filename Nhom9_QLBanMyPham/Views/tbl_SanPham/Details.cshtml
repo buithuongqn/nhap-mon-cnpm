@@ -1,0 +1,247 @@
+﻿@model Nhom9_QLBanMyPham.Models.tbl_SanPham
+
+@{
+    ViewBag.Title = "Chi tiết sản phẩm";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    :root {
+        --primary-color: #326e51;
+        --primary-hover: #26553e;
+        --text-main: #1e293b;
+        --text-muted: #64748b;
+        --bg-light: #f4f7f6;
+    }
+
+    body {
+        background-color: var(--bg-light);
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    h2 {
+        color: var(--primary-color);
+        font-weight: 800;
+        text-align: center;
+        margin: 40px 0;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    /* Khung chứa chi tiết */
+    .details-card {
+        background: #fff;
+        border-radius: 20px;
+        max-width: 1100px;
+        margin: 0 auto 50px auto;
+        padding: 50px;
+        box-shadow: 0 15px 35px rgba(0,0,0,0.08);
+        border: none;
+    }
+
+    /* Bố cục 2 cột */
+    .details-container {
+        display: flex;
+        gap: 60px;
+        align-items: flex-start;
+    }
+
+    /* Cột hình ảnh */
+    .product-image-box {
+        flex: 0 0 420px;
+        text-align: center;
+    }
+
+    .product-image-box img {
+        width: 100%;
+        border-radius: 20px;
+        border: 1px solid #eef2f3;
+        box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+        object-fit: cover;
+        transition: transform 0.3s ease;
+    }
+
+    .product-image-box img:hover {
+        transform: scale(1.02);
+    }
+
+    .product-id-tag {
+        display: inline-block;
+        margin-top: 25px;
+        background-color: #f0fdf4;
+        color: var(--primary-color);
+        padding: 10px 25px;
+        border-radius: 30px;
+        font-weight: 700;
+        font-size: 14px;
+        border: 1px solid #dcfce7;
+    }
+
+    /* Cột thông tin */
+    .product-info-box {
+        flex: 1;
+    }
+
+    .product-name {
+        color: var(--text-main);
+        font-size: 32px;
+        font-weight: 800;
+        margin-bottom: 15px;
+        line-height: 1.2;
+    }
+
+    .price-tag {
+        font-size: 28px;
+        color: #d32f2f;
+        font-weight: 800;
+        margin-bottom: 30px;
+        display: block;
+    }
+
+    /* Danh sách thông số */
+    .info-list {
+        display: grid;
+        grid-template-columns: 160px 1fr;
+        gap: 15px;
+        margin-bottom: 30px;
+    }
+
+    .info-list dt {
+        color: var(--text-muted);
+        font-weight: 600;
+        font-size: 15px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .info-list dd {
+        color: var(--text-main);
+        font-weight: 600;
+        font-size: 16px;
+        margin: 0;
+    }
+
+    .description-box {
+        background: #f8fafc;
+        padding: 25px;
+        border-radius: 15px;
+        border-left: 5px solid var(--primary-color);
+        margin-top: 30px;
+        line-height: 1.8;
+        color: #475569;
+    }
+
+    .description-box strong {
+        color: var(--primary-color);
+        font-size: 17px;
+        display: block;
+        margin-bottom: 10px;
+    }
+
+    /* Nút bấm */
+    .action-buttons {
+        margin-top: 40px;
+        display: flex;
+        gap: 20px;
+    }
+
+    .btn-edit-custom {
+        background-color: var(--primary-color);
+        color: white !important;
+        padding: 14px 40px;
+        border-radius: 12px;
+        text-decoration: none;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        transition: 0.3s;
+        box-shadow: 0 4px 12px rgba(50, 110, 81, 0.2);
+    }
+
+    .btn-edit-custom:hover {
+        background-color: var(--primary-hover);
+        transform: translateY(-2px);
+    }
+
+    .btn-back-custom {
+        background-color: #fff;
+        color: var(--text-muted) !important;
+        padding: 14px 30px;
+        border-radius: 12px;
+        text-decoration: none;
+        font-weight: 600;
+        border: 2px solid #e2e8f0;
+        transition: 0.3s;
+    }
+
+    .btn-back-custom:hover {
+        background-color: #f1f5f9;
+        color: var(--primary-color) !important;
+    }
+
+    /* Responsive */
+    @@media (max-width: 992px) {
+        .details-container {
+            flex-direction: column;
+            align-items: center;
+        }
+        .product-image-box {
+            flex: 0 0 auto;
+            width: 100%;
+            max-width: 400px;
+        }
+    }
+</style>
+
+<h2><i class="fa fa-search-plus"></i> Chi tiết sản phẩm</h2>
+
+<div class="details-card">
+    <div class="details-container">
+        <div class="product-image-box">
+            <img src="~/Content/Images/@(string.IsNullOrEmpty(Model.sHinhAnh) ? "no-image.png" : Model.sHinhAnh)" alt="@Model.sTenSP" />
+            <div class="product-id-tag">
+                <i class="fa fa-barcode"></i> SKU: @Model.PK_sMaSP
+            </div>
+        </div>
+
+        <div class="product-info-box">
+            <div class="product-name">@Model.sTenSP</div>
+            <div class="price-tag">@string.Format("{0:N0}", Model.fGiaBan) VNĐ</div>
+
+            <dl class="info-list">
+                <dt><i class="fa fa-folder-open"></i> Danh mục</dt>
+                <dd>@Model.tbl_DanhMuc.sTenDM</dd>
+
+                <dt><i class="fa fa-industry"></i> Xuất xứ</dt>
+                <dd>@Model.tbl_NhaCungCap.sTenNCC</dd>
+
+                <dt><i class="fa fa-flask"></i> Dung tích</dt>
+                <dd>@Model.sDungTich</dd>
+
+                <dt><i class="fa fa-palette"></i> Tone màu</dt>
+                <dd>@Model.sMauSac</dd>
+
+                <dt><i class="fa fa-boxes"></i> Kho hàng</dt>
+                <dd><span style="color: @(Model.iSoLuongTon > 0 ? "#10b981" : "#ef4444")">@Model.iSoLuongTon sản phẩm sẵn có</span></dd>
+
+                <dt><i class="fa fa-calendar-alt"></i> Hạn dùng</dt>
+                <dd>@(Model.dNgayHetHan.HasValue ? Model.dNgayHetHan.Value.ToString("dd/MM/yyyy") : "Đang cập nhật")</dd>
+            </dl>
+
+            <div class="description-box">
+                <strong><i class="fa fa-align-left"></i> Mô tả chi tiết</strong>
+                <p>@(string.IsNullOrEmpty(Model.sMoTa) ? "Thông tin mô tả đang được cập nhật cho sản phẩm này." : Model.sMoTa)</p>
+            </div>
+
+            <div class="action-buttons">
+                <a href="@Url.Action("Edit", new { id = Model.PK_sMaSP })" class="btn-edit-custom">
+                    <i class="fa fa-pencil-alt"></i> CHỈNH SỬA THÔNG TIN
+                </a>
+                <a href="@Url.Action("Index")" class="btn-back-custom">
+                    <i class="fa fa-arrow-left"></i> QUAY LẠI
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
