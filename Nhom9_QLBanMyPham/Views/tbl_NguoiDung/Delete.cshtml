@@ -14,12 +14,13 @@
         padding: 30px;
         border-radius: 15px;
         box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-        border-top: 6px solid #ff5252; /* Màu đỏ cảnh báo */
+        /* Đổi sang màu xanh chủ đạo #326e51 */
+        border-top: 6px solid #326e51;
     }
 
-    /* Tiêu đề cảnh báo */
+    /* Tiêu đề cảnh báo - Dùng màu xanh đậm để nhấn mạnh */
     .warning-title {
-        color: #ff5252;
+        color: #26543e;
         font-weight: bold;
         text-align: center;
         margin-bottom: 25px;
@@ -27,7 +28,7 @@
 
     /* Tối ưu danh sách thông tin */
     .dl-horizontal dt {
-        color: #e91e63; /* Màu hồng chủ đạo */
+        color: #326e51; /* Màu xanh chủ đạo */
         padding-bottom: 10px;
         font-weight: 600;
         text-align: left;
@@ -35,26 +36,28 @@
 
     .dl-horizontal dd {
         padding-bottom: 10px;
-        border-bottom: 1px dashed #f8bbd0;
+        border-bottom: 1px dashed #c8d6cf; /* Màu xanh nhạt hài hòa */
         margin-bottom: 10px;
         color: #333;
     }
 
-    /* Nút Xóa (Màu đỏ) */
+    /* Nút Xóa (Sử dụng màu xanh chủ đạo nhưng đậm hơn) */
     .btn-delete-confirm {
-        background-color: #ff5252;
+        background-color: #326e51;
         color: white;
         padding: 10px 25px;
         border-radius: 20px;
         border: none;
         font-weight: bold;
         transition: 0.3s;
+        cursor: pointer;
     }
 
         .btn-delete-confirm:hover {
-            background-color: #d32f2f;
-            box-shadow: 0 4px 12px rgba(255, 82, 82, 0.4);
+            background-color: #26543e;
+            box-shadow: 0 4px 12px rgba(50, 110, 81, 0.4);
             color: white;
+            transform: translateY(-1px);
         }
 
     /* Nút Quay lại */
@@ -63,21 +66,31 @@
         text-decoration: none;
         margin-left: 15px;
         font-weight: 500;
+        transition: 0.3s;
     }
 
         .btn-back:hover {
-            color: #e91e63;
+            color: #326e51;
+            text-decoration: none;
         }
 
     .action-group {
         text-align: center;
         margin-top: 30px;
     }
+
+    /* Tùy chỉnh nhãn phân quyền cho đồng bộ */
+    .label-custom {
+        background-color: #326e51;
+        color: white;
+        padding: 0.2em 0.6em;
+        border-radius: 4px;
+    }
 </style>
 
 <div class="delete-container">
     <h2 class="warning-title">
-        <i class="glyphicon glyphicon-warning-sign"></i> XÁC NHẬN XÓA
+        <i class="glyphicon glyphicon-info-sign"></i> XÁC NHẬN XÓA
     </h2>
     <h3 class="text-center text-muted">Bạn có chắc chắn muốn xóa nhân viên này không?</h3>
     <hr />
@@ -95,11 +108,11 @@
 
             <dt>Quyền hạn</dt>
             <dd>
-                <span class="label label-danger">@Html.DisplayFor(model => model.sPhanQuyen)</span>
+                <span class="label-custom">@Html.DisplayFor(model => model.sPhanQuyen)</span>
             </dd>
 
             <dt>Lương cơ bản</dt>
-            <dd class="text-danger" style="font-weight:bold">
+            <dd style="font-weight:bold; color: #326e51;">
                 @String.Format("{0:N0}", Model.fLuong) VNĐ
             </dd>
         </dl>

@@ -14,12 +14,13 @@
         padding: 40px;
         border-radius: 15px;
         box-shadow: 0 10px 30px rgba(0,0,0,0.08);
-        border-top: 6px solid #e91e63;
+        /* Đổi sang màu xanh chủ đạo #326e51 */
+        border-top: 6px solid #326e51;
     }
 
-    /* Tiêu đề hồng đậm */
+    /* Tiêu đề xanh đậm */
     h2 {
-        color: #e91e63;
+        color: #326e51;
         font-weight: bold;
         text-align: center;
         text-transform: uppercase;
@@ -28,33 +29,38 @@
 
     h4 {
         text-align: center;
-        color: #888;
+        color: #666;
         font-weight: normal;
         margin-bottom: 30px;
     }
 
     /* Tối ưu các label */
     .control-label {
-        color: #e91e63;
+        color: #326e51;
         font-weight: 600 !important;
+        text-align: left !important;
+        padding-left: 35px !important; /* Giúp chữ không dính sát mép trái */
     }
 
     /* Tùy chỉnh ô nhập liệu */
     .form-control {
         border-radius: 8px;
-        border: 1px solid #f8bbd0;
+        border: 1px solid #c8d6cf; /* Màu xanh nhạt để hài hòa */
         transition: all 0.3s;
         height: 40px;
+        /* Thêm 2 dòng dưới đây */
+        width: 100% !important;
+        max-width: 100% !important;
     }
 
         .form-control:focus {
-            border-color: #e91e63;
-            box-shadow: 0 0 8px rgba(233, 30, 99, 0.2);
+            border-color: #326e51;
+            box-shadow: 0 0 8px rgba(50, 110, 81, 0.2);
         }
 
-    /* Nút Submit hồng rực rỡ */
+    /* Nút Submit xanh chuyên nghiệp */
     .btn-submit {
-        background-color: #e91e63;
+        background-color: #326e51;
         color: white;
         padding: 12px 30px;
         border-radius: 25px;
@@ -67,9 +73,9 @@
     }
 
         .btn-submit:hover {
-            background-color: #c2185b;
+            background-color: #26543e; /* Màu xanh đậm hơn khi hover */
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(233, 30, 99, 0.3);
+            box-shadow: 0 5px 15px rgba(50, 110, 81, 0.3);
         }
 
     /* Nút Quay lại */
@@ -82,12 +88,13 @@
     }
 
         .back-link:hover {
-            color: #e91e63;
+            color: #326e51;
         }
 
     /* Căn chỉnh khoảng cách các nhóm form */
     .form-group {
         margin-bottom: 20px;
+        width:700px;
     }
 </style>
 
@@ -146,7 +153,6 @@
             <div class="form-group">
                 @Html.LabelFor(model => model.sPhanQuyen, "Phân quyền", htmlAttributes: new { @class = "control-label col-md-3" })
                 <div class="col-md-9">
-                    @* Bạn có thể thay bằng DropDownList nếu muốn khoa học hơn *@
                     @Html.DropDownListFor(model => model.sPhanQuyen, new SelectList(new[] { "Admin", "NhanVien" }), "-- Chọn quyền hạn --", new { @class = "form-control" })
                     @Html.ValidationMessageFor(model => model.sPhanQuyen, "", new { @class = "text-danger" })
                 </div>

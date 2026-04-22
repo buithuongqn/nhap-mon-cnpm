@@ -51,7 +51,7 @@
             text-transform: uppercase;
         }
 
-    /* 2. BỘ LỌC HÀNG NGANG (Tối ưu ở đây) */
+    /* 2. BỘ LỌC HÀNG NGANG */
     .filter-card {
         background: white;
         padding: 15px 25px;
@@ -62,9 +62,9 @@
 
     .filter-form-horizontal {
         display: flex;
-        align-items: center; /* Căn giữa theo chiều dọc */
-        flex-wrap: wrap; /* Tự xuống dòng nếu màn hình quá nhỏ */
-        gap: 15px; /* Khoảng cách giữa các phần tử */
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 15px;
     }
 
     .filter-group {
@@ -111,10 +111,133 @@
         border-radius: 12px;
         box-shadow: 0 4px 12px rgba(0,0,0,0.05);
     }
+
+    /* CSS DÀNH RIÊNG CHO IN ẤN */
+    @@media print {
+        nav, .navbar, .btn, .filter-card, .chart-card, footer, .fas, .glyphicon, .stats-grid {
+            display: none !important;
+        }
+
+        body {
+            background: white !important;
+            padding: 0 !important;
+            font-family: "Times New Roman", Times, serif !important;
+        }
+
+        .report-container {
+            padding: 0 !important;
+            box-shadow: none !important;
+        }
+        /* TỔ CHỨC LẠI HEADER KHI IN */
+        .print-header {
+            display: block !important;
+            margin-bottom: 20px;
+        }
+
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .company-side {
+            text-align: center;
+            width: 40%;
+        }
+
+        .national-side {
+            text-align: center;
+            width: 55%;
+        }
+
+        .line-small {
+            width: 60px;
+            border-top: 1px solid #000;
+            margin: 5px auto;
+        }
+
+        .line-large {
+            width: 160px;
+            border-top: 1px solid #000;
+            margin: 5px auto;
+        }
+
+        .report-title-area {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+            .report-title-area h2 {
+                font-weight: bold;
+                text-transform: uppercase;
+                font-size: 18pt;
+                margin-bottom: 5px;
+            }
+
+        .table-card {
+            width: 100% !important;
+            box-shadow: none !important;
+            padding: 0 !important;
+        }
+
+        .table {
+            width: 100% !important;
+            border-collapse: collapse !important;
+        }
+
+            .table th, .table td {
+                border: 1px solid #000 !important;
+                padding: 8px !important;
+                color: #000 !important;
+            }
+
+        .text-success {
+            color: #000 !important;
+            font-weight: bold;
+        }
+
+        .print-footer {
+            display: block !important;
+            margin-top: 50px;
+            float: right;
+            width: 280px;
+            text-align: center;
+        }
+    }
+
+    .print-header, .print-footer {
+        display: none;
+    }
 </style>
 
 <div class="report-container">
-    <h2 class="mb-4"><i class="fas fa-chart-line"></i> Phân tích kinh doanh</h2>
+    <div class="print-header">
+        <div class="header-top">
+            <div class="company-side">
+                <div style="font-weight: bold; font-size: 13pt;">HASAKI SHOP</div>
+                <div style="font-size: 10pt;">Hệ thống Mỹ phẩm & Làm đẹp</div>
+                <div class="line-small"></div>
+                <div style="font-size: 9pt;">Số: ...../BC-HSK</div>
+            </div>
+            <div class="national-side">
+                <div style="font-weight: bold; font-size: 11pt;">CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM</div>
+                <div style="font-weight: bold; font-size: 12pt;">Độc lập - Tự do - Hạnh phúc</div>
+                <div class="line-large"></div>
+            </div>
+        </div>
+
+        <div class="report-title-area">
+            <h2>BÁO CÁO CHI TIẾT KẾT QUẢ KINH DOANH</h2>
+            <p>Từ ngày @ViewBag.TuNgay đến ngày @ViewBag.DenNgay</p>
+            <p style="font-style: italic; font-size: 10pt;">Ngày xuất báo cáo: @DateTime.Now.ToString("dd/MM/yyyy HH:mm")</p>
+        </div>
+
+        <div style="margin-top: 15px; text-align: left;">
+            <p><strong>Kính gửi:</strong> Ban Giám đốc cửa hàng HASAKI</p>
+        </div>
+    </div>
+
+    <h4 class="mb-4"><i class="fas fa-chart-line"></i> Phân tích kinh doanh</h4>
 
     <div class="stats-grid">
         <div class="card-stat">
@@ -137,25 +260,26 @@
 
     <div class="filter-card">
         <form method="get" action="@Url.Action("Index", "BaoCao")" class="filter-form-horizontal">
-            <span class="mr-2 text-muted"><i class="fas fa-calendar-alt"></i> Khoảng thời gian:</span>
-
             <div class="filter-group">
-                <label>Từ</label>
+                <label>Từ ngày</label>
                 <input type="date" name="tuNgay" class="form-control" value="@ViewBag.TuNgay" />
             </div>
-
             <div class="filter-group">
-                <label>Đến</label>
+                <label>Đến ngày</label>
                 <input type="date" name="denNgay" class="form-control" value="@ViewBag.DenNgay" />
             </div>
-
-            <button type="submit" class="btn btn-filter ml-md-3">
-                <i class="fas fa-filter"></i> Lọc dữ liệu
+            <button type="submit" class="btn btn-filter">
+                <i class="fas fa-filter"></i> Lọc
             </button>
 
-            <a href="@Url.Action("Index", "BaoCao")" class="btn btn-outline-secondary ml-1">
-                <i class="fas fa-undo"></i> Làm mới
-            </a>
+            <div class="ml-auto">
+                <button type="button" onclick="printReport('sales')" class="btn btn-info">
+                    <i class="fas fa-print"></i> In SP bán chạy
+                </button>
+                <button type="button" onclick="printReport('revenue')" class="btn btn-success">
+                    <i class="fas fa-file-invoice-dollar"></i> In báo cáo doanh thu
+                </button>
+            </div>
         </form>
     </div>
 
@@ -167,32 +291,80 @@
             </div>
         </div>
 
-        <div class="table-card">
-            <h5 class="mb-4 font-weight-bold">Top sản phẩm bán chạy</h5>
+        <div class="table-card" id="printableTable">
+            <h5 class="mb-4 font-weight-bold sales-title">Top sản phẩm bán chạy</h5>
+            <h5 class="mb-4 font-weight-bold revenue-title" style="display:none;">Chi tiết doanh thu theo tháng</h5>
+
             <div class="table-responsive">
-                <table class="table table-hover">
+                <table class="table table-hover" id="tableSales">
                     <thead>
-                        <tr><th>Tên SP</th><th class="text-center">SL</th><th class="text-right">Doanh thu</th></tr>
+                        <tr><th>Tên sản phẩm</th><th class="text-center">Số lượng</th><th class="text-right">Doanh thu</th></tr>
                     </thead>
                     <tbody>
                         @foreach (var sp in Model.SanPhamBanChay)
                         {
                             <tr>
-                                <td><small class="font-weight-bold">@sp.TenSP</small></td>
+                                <td>@sp.TenSP</td>
                                 <td class="text-center">@sp.SoLuongDaBan</td>
-                                <td class="text-right text-success font-weight-bold">@String.Format("{0:n0}", sp.DoanhThu)</td>
+                                <td class="text-right text-success">@String.Format("{0:n0}", sp.DoanhThu) đ</td>
                             </tr>
                         }
                     </tbody>
                 </table>
+
+                <table class="table table-hover" id="tableRevenue" style="display:none;">
+                    <thead>
+                        <tr><th>Thời gian (Tháng)</th><th class="text-right">Doanh thu tháng</th></tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.BieuDoDoanhThu)
+                        {
+                            <tr>
+                                <td>Tháng @item.Thang</td>
+                                <td class="text-right text-success">@String.Format("{0:n0}", item.DoanhThu) đ</td>
+                            </tr>
+                        }
+                        <tr style="background: #eee; font-weight: bold;">
+                            <td>TỔNG CỘNG</td>
+                            <td class="text-right">@String.Format("{0:n0}", Model.TongDoanhThu) đ</td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
+    </div>
+
+    <div class="print-footer">
+        <p><i>TP. Hồ Chí Minh, Ngày ...... tháng ...... năm ......</i></p>
+        <p><strong>Người lập biểu (Ký tên)</strong></p>
+        <br><br><br>
+        <p><strong>@User.Identity.Name</strong></p>
     </div>
 </div>
 
 @section scripts {
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
+        function printReport(type) {
+            const tableSales = document.getElementById('tableSales');
+            const tableRevenue = document.getElementById('tableRevenue');
+            const salesTitle = document.querySelector('.sales-title');
+            const revenueTitle = document.querySelector('.revenue-title');
+
+            if (type === 'sales') {
+                tableSales.style.display = 'table';
+                salesTitle.style.display = 'block';
+                tableRevenue.style.display = 'none';
+                revenueTitle.style.display = 'none';
+            } else {
+                tableSales.style.display = 'none';
+                salesTitle.style.display = 'none';
+                tableRevenue.style.display = 'table';
+                revenueTitle.style.display = 'block';
+            }
+            window.print();
+        }
+
         document.addEventListener("DOMContentLoaded", function () {
             const labels = @Html.Raw(Json.Encode(Model.BieuDoDoanhThu.Select(x => x.Thang)));
             const dataValues = @Html.Raw(Json.Encode(Model.BieuDoDoanhThu.Select(x => x.DoanhThu)));
@@ -217,12 +389,6 @@
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            ticks: { callback: (value) => value.toLocaleString('vi-VN') + ' đ' }
-                        }
-                    },
                     plugins: { legend: { display: false } }
                 }
             });

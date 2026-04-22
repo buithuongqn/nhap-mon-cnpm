@@ -236,7 +236,10 @@
         </div>
         <div class="col-md-3">
             <label><i class="fa fa-user-tie"></i> Nhân viên lập</label>
-            <input type="text" class="form-control" value="NV01 - Admin" readonly style="background-color: #e9ecef" />
+            @* Sửa dòng value dưới đây để lấy từ Session *@
+            <input type="text" class="form-control"
+                   value="@(Session["MaNV"] != null ? Session["MaNV"] + " - " + Session["TenNV"] : "Chưa đăng nhập")"
+                   readonly style="background-color: #e9ecef" />
         </div>
         <div class="col-md-6">
             <label><i class="fa fa-address-book"></i> Đối tượng khách hàng</label>
